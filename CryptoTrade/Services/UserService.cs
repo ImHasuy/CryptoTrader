@@ -1,4 +1,6 @@
-﻿using CryptoTrade.Context;
+﻿using AutoMapper;
+using CryptoTrade.Context;
+using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
 using CryptoTrade.Repositories.Interfaces;
 
@@ -7,16 +9,20 @@ namespace CryptoTrade.Services
     public class UserService : IUserServicecs
     {
         private readonly AppDbContext _context;
-        public UserService(AppDbContext context)
+        private readonly IMapper _mapper;
+        public UserService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
 
         }
 
 
-        public Task<bool> CreateUserAsync(User user)
+        public Task<bool> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            throw new NotImplementedException();
+            var user = _mapper.Map<User>(userCreateDto);
+
+            throw new Exception();
         }
 
         public Task<bool> DeleteUserAsync(int id)

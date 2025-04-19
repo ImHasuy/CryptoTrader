@@ -4,7 +4,7 @@ namespace CryptoTrade.Entities
 {
     public class Log
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
