@@ -1,4 +1,7 @@
 using CryptoTrade.Context;
+using CryptoTrade.Repositories;
+using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -14,6 +17,13 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
     var connectionString = builder.Configuration.GetConnectionString("ConnectionAtHome");
     optionsBuilder.UseSqlServer(connectionString);
 });
+
+//Scoped
+builder.Services.AddScoped<IUserServicecs, UserService>();
+builder.Services.AddScoped<IUnitOfWork, ProductionUnitOfWork>();
+
+
+//Scoped\\
 
 
 
