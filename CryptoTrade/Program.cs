@@ -1,9 +1,22 @@
+using CryptoTrade.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("ConnectionAtHome");
+    optionsBuilder.UseSqlServer(connectionString);
+});
+
+
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
