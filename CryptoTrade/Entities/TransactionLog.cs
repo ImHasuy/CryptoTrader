@@ -13,10 +13,11 @@ namespace CryptoTrade.Entities
         public User User { get; set; } = new User();
 
         [ForeignKey("Crypto")]
-        public int CryptoId { get; set; }
+        public Guid CryptoId { get; set; }
         public Crypto Crypto { get; set; } = new Crypto();
-
+        [Required]
         public double Amount { get; set; }
+        [Required]
         public double Value { get; set; }
         public DateTime Date { get; set; }
     }

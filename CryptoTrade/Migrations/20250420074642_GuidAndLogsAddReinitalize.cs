@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CryptoTrade.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDB : Migration
+    public partial class GuidAndLogsAddReinitalize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace CryptoTrade.Migrations
                 name: "Cryptos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<double>(type: "float", nullable: false)
                 },
@@ -29,8 +28,7 @@ namespace CryptoTrade.Migrations
                 name: "Wallets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Balance = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -39,13 +37,32 @@ namespace CryptoTrade.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExchangeRateLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CryptoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExchangeRateLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExchangeRateLogs_Cryptos_CryptoId",
+                        column: x => x.CryptoId,
+                        principalTable: "Cryptos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CryptoWallets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    WalletId = table.Column<int>(type: "int", nullable: false),
-                    CryptoId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CryptoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Value = table.Column<double>(type: "float", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -71,12 +88,12 @@ namespace CryptoTrade.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WalletId = table.Column<int>(type: "int", nullable: false)
+                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,28 +107,27 @@ namespace CryptoTrade.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Logs",
+                name: "TransactionLogs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CryptoId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CryptoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Value = table.Column<double>(type: "float", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logs", x => x.Id);
+                    table.PrimaryKey("PK_TransactionLogs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Logs_Cryptos_CryptoId",
+                        name: "FK_TransactionLogs_Cryptos_CryptoId",
                         column: x => x.CryptoId,
                         principalTable: "Cryptos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Logs_Users_UserId",
+                        name: "FK_TransactionLogs_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -129,13 +145,18 @@ namespace CryptoTrade.Migrations
                 column: "WalletId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Logs_CryptoId",
-                table: "Logs",
+                name: "IX_ExchangeRateLogs_CryptoId",
+                table: "ExchangeRateLogs",
                 column: "CryptoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Logs_UserId",
-                table: "Logs",
+                name: "IX_TransactionLogs_CryptoId",
+                table: "TransactionLogs",
+                column: "CryptoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionLogs_UserId",
+                table: "TransactionLogs",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -151,7 +172,10 @@ namespace CryptoTrade.Migrations
                 name: "CryptoWallets");
 
             migrationBuilder.DropTable(
-                name: "Logs");
+                name: "ExchangeRateLogs");
+
+            migrationBuilder.DropTable(
+                name: "TransactionLogs");
 
             migrationBuilder.DropTable(
                 name: "Cryptos");

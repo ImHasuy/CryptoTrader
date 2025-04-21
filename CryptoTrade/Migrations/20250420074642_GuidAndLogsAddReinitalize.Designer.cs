@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250419101500_CreateDB")]
-    partial class CreateDB
+    [Migration("20250420074642_GuidAndLogsAddReinitalize")]
+    partial class GuidAndLogsAddReinitalize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace CryptoTrade.Migrations
 
             modelBuilder.Entity("CryptoTrade.Entities.Crypto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -47,17 +45,15 @@ namespace CryptoTrade.Migrations
 
             modelBuilder.Entity("CryptoTrade.Entities.CryptoWallet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int>("CryptoId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CryptoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -65,8 +61,8 @@ namespace CryptoTrade.Migrations
                     b.Property<double>("Value")
                         .HasColumnType("float");
 
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -77,25 +73,45 @@ namespace CryptoTrade.Migrations
                     b.ToTable("CryptoWallets");
                 });
 
-            modelBuilder.Entity("CryptoTrade.Entities.Log", b =>
+            modelBuilder.Entity("CryptoTrade.Entities.ExchangeRateLog", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("CryptoId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CryptoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CryptoId");
+
+                    b.ToTable("ExchangeRateLogs");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Entities.TransactionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("CryptoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Value")
                         .HasColumnType("float");
@@ -106,16 +122,14 @@ namespace CryptoTrade.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Logs");
+                    b.ToTable("TransactionLogs");
                 });
 
             modelBuilder.Entity("CryptoTrade.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -125,12 +139,15 @@ namespace CryptoTrade.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -141,11 +158,9 @@ namespace CryptoTrade.Migrations
 
             modelBuilder.Entity("CryptoTrade.Entities.Wallet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
@@ -174,7 +189,18 @@ namespace CryptoTrade.Migrations
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("CryptoTrade.Entities.Log", b =>
+            modelBuilder.Entity("CryptoTrade.Entities.ExchangeRateLog", b =>
+                {
+                    b.HasOne("CryptoTrade.Entities.Crypto", "Crypto")
+                        .WithMany()
+                        .HasForeignKey("CryptoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crypto");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Entities.TransactionLog", b =>
                 {
                     b.HasOne("CryptoTrade.Entities.Crypto", "Crypto")
                         .WithMany()

@@ -6,7 +6,8 @@ namespace CryptoTrade.Entities
     {
         [Required, Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-        public double Balance { get; set; }
+        [Required]
+        public double Balance { get; set; } = 1000.0;
         public List<CryptoWallet> OwnedCryptos { get; set; } = new List<CryptoWallet>();
     }
 }

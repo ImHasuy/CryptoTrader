@@ -2,6 +2,6 @@
 {
     public interface IUnitOfWork 
     {
-        IUserServicecs UserService { get; }
+        IUserServices UserService { get; }
     }
 }

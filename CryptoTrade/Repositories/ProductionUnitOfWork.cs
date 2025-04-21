@@ -9,15 +9,17 @@ namespace CryptoTrade.Repositories
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        IUserServicecs userServicecs;
+        private readonly IConfiguration _configuration;
+        IUserServices userServices;
 
-        public ProductionUnitOfWork(AppDbContext context, IMapper mapper)
+        public ProductionUnitOfWork(AppDbContext context, IMapper mapper, IConfiguration configuration )
         {
             _context = context;
             _mapper = mapper;
-            userServicecs = new UserService(_context, _mapper);
+            _configuration = configuration;
+            userServices = new UserService(_context, _mapper,_configuration );
         }
 
-        public IUserServicecs UserService => userServicecs;
+        public IUserServices UserService => userServices;
     }
 }
