@@ -6,8 +6,7 @@ namespace CryptoTrade.Repositories.Interfaces
 {
     public interface IUserServices
     {
-        Task<string> LoginAsync(UserLoginDto userLoginDto);
-        Task<User?> Authenticate(UserLoginDto userLoginDto);
+        Task<string> AuthenticateAsync(UserLoginDto userLoginDto);
         Task<string> GenerateToken(User user);
         Task<ClaimsIdentity> GetClaimsIdentity(User user);
         Task<User?> GetUserByIdAsync(string id);

@@ -77,41 +77,26 @@ namespace CryptoTrade.Services
         }
 
 
-
-
-        public async Task<string> LoginAsync(UserLoginDto userLoginDto)
+        /// <summary>
+        /// Authenticates a user based on the provided login credentials.
+        /// </summary>
+        /// <param name="userLoginDto">User Login details</param>
+        /// <returns></returns>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        public async Task<string> AuthenticateAsync(UserLoginDto userLoginDto)
         {
-            var user = await Authenticate(userLoginDto);
-            if (user == null)
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password))
             {
                 throw new UnauthorizedAccessException("Hibás E-mail cím vagy jelszó!");
             }
-
-            return await GenerateToken(user);
             
-        }
-
-
-
-        public async Task<User?> Authenticate(UserLoginDto userLoginDto)
-        {
-            bool ValidBool;
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
-            if (user != null)
-            {
-                ValidBool = BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password);
-                return user; //User exists, password matches
-            }
-            else
-            {
-                return null;
-            }
+            return await GenerateToken(user);
         }
         public async Task<string> GenerateToken(User user)
         {
             var id = await GetClaimsIdentity(user);
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwrSettings:SecretKey"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var exp = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtSettings:ExpiresInDays"]));
             var token = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], id.Claims, expires: exp, signingCredentials: creds);

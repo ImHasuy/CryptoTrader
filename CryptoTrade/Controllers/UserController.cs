@@ -3,9 +3,14 @@ using CryptoTrade.Entities;
 using CryptoTrade.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using NuGet.Protocol;
 
 namespace CryptoTrade.Controllers
 {
+
+    /// <summary>
+    /// This controller is responsible for handling user-related operations such as registration and fetching user details.
+    /// </summary>
     [ApiController]
     [Route("api/[Controller]")]
     //[Authorize]
@@ -13,13 +18,17 @@ namespace CryptoTrade.Controllers
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        /// <summary>
+        /// Constructor for UserController
+        /// </summary>
+        /// <param name="unitOfWork"></param>
         public UserController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         /// <summary>
-        /// Gets back with the uesr which matches the id
+        /// Gets back with the user which matches the id
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -62,6 +71,31 @@ namespace CryptoTrade.Controllers
 
             }
             catch(Exception e)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = e.Message;
+            }
+            return BadRequest(apiResponse.Message);
+        }
+
+
+        /// <summary>
+        /// Login endpoitn to an existing user and return a JWT token.
+        /// </summary>
+        /// <param name="userLoginDto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            try
+            {
+                var token = await _unitOfWork.UserService.AuthenticateAsync(userLoginDto);
+                apiResponse.Message =token;
+                return Ok(apiResponse);
+            }
+            catch (Exception e)
             {
                 apiResponse.StatusCode = 400;
                 apiResponse.Message = e.Message;
