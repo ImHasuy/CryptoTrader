@@ -10,10 +10,10 @@ namespace CryptoTrade.Repositories.Interfaces
         Task<User?> Authenticate(UserLoginDto userLoginDto);
         Task<string> GenerateToken(User user);
         Task<ClaimsIdentity> GetClaimsIdentity(User user);
-        Task<User> GetUserByIdAsync(int id);
+        Task<User?> GetUserByIdAsync(string id);
         Task<User> GetUserByEmailAsync(string email);
         Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<bool> CreateUserAsync(UserCreateDto userCreateDto);
+        Task<User> CreateUserAsync(UserCreateDto userCreateDto);
         Task<bool> UpdateUserAsync(User user);
         Task<bool> DeleteUserAsync(int id);
         Task<bool> SaveChangesAsync();

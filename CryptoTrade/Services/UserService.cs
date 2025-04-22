@@ -29,11 +29,14 @@ namespace CryptoTrade.Services
         }
 
 
-        public Task<bool> CreateUserAsync(UserCreateDto userCreateDto)
+        public async Task<User> CreateUserAsync(UserCreateDto userCreateDto)
         {
             var user = _mapper.Map<User>(userCreateDto);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
-            throw new Exception();
+            return user;
+
         }
 
         public Task<bool> DeleteUserAsync(int id)
@@ -51,9 +54,16 @@ namespace CryptoTrade.Services
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
+            if (user == null)
+            {
+                throw new Exception($"User with id {id} not found");
+            }
+            return user;
+
+
         }
 
         public Task<bool> SaveChangesAsync()
@@ -80,10 +90,6 @@ namespace CryptoTrade.Services
             return await GenerateToken(user);
             
         }
-
-
-
-
 
 
 
@@ -125,8 +131,6 @@ namespace CryptoTrade.Services
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             return Task.FromResult(new ClaimsIdentity(claims, "Token"));
-
-
         }
 
 

@@ -18,15 +18,18 @@ namespace CryptoTrade.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Gets back with the uesr which matches the id
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route("UserById")]
-        public async Task<IActionResult> GetUserById()
+        [Route("UserById/{userid}")]
+        public async Task<IActionResult> GetUserById([FromRoute] string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                int id = 0;
-                apiResponse.Data = await _unitOfWork.UserService.GetUserByIdAsync(id);
+                apiResponse.Data = await _unitOfWork.UserService.GetUserByIdAsync(userid);
                 return Ok(apiResponse);
                 //Gets back with the User in the .Data
             }
@@ -40,14 +43,21 @@ namespace CryptoTrade.Controllers
 
         }
 
+
+        /// <summary>
+        /// Register a new user.
+        /// </summary>
+        /// <param name="userCreateDto">The details for the user to be created.</param>
+        /// <returns>It returns which indicates the result of the action</returns>
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(UserCreateDto userCreateDto)
+        public async Task<IActionResult> Register([FromBody]UserCreateDto userCreateDto)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
                 apiResponse.Data = await _unitOfWork.UserService.CreateUserAsync(userCreateDto);
+                apiResponse.Message = "User Created Successfully";
                 return Ok(apiResponse);
 
             }
@@ -56,7 +66,7 @@ namespace CryptoTrade.Controllers
                 apiResponse.StatusCode = 400;
                 apiResponse.Message = e.Message;
             }
-            return BadRequest(apiResponse);
+            return BadRequest(apiResponse.Message);
         }
     }
 }

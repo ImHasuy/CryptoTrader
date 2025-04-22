@@ -9,7 +9,11 @@ namespace CryptoTrade.Services
         public AutoMapperProfile()
         {
             //User config
-            CreateMap<User, UserCreateDto>().ReverseMap();
+            CreateMap<User, UserCreateDto>()
+                .ForMember(dest=> dest.Password, opt=>opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password))); //Encrypts the password
+
+
+
         }
     }
 }
