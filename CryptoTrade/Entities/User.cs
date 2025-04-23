@@ -1,19 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CryptoTrade.Entities.EntityRelatedEnums;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CryptoTrade.Entities
 {
+    [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(UserName), IsUnique = true)]
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
+        [Required, Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
+        [Required]
+        public string UserName { get; set; } = string.Empty;
+        [Required]
+        public Roles Role { get; set; } = Roles.User;
         [EmailAddress]
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = string.Empty;
+        [Required]
+        public string Password { get; set; } = string.Empty;
 
         [ForeignKey("Wallet")]
-        public int WalletId { get; set; }
+        public Guid WalletId { get; set; }
         public Wallet Wallet { get; set; } = new Wallet();
     }
 }

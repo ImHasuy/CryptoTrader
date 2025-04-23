@@ -9,7 +9,8 @@ namespace CryptoTrade.Context
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Crypto> Cryptos { get; set; }
         public DbSet<CryptoWallet> CryptoWallets { get; set; }
-        public DbSet<Log> Logs { get; set; }
+        public DbSet<TransactionLog> TransactionLogs { get; set; }
+        public DbSet<ExchangeRateLog> ExchangeRateLogs { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
