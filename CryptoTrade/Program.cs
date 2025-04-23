@@ -26,8 +26,23 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 //Scoped
 builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddScoped<IUnitOfWork, ProductionUnitOfWork>();
-
+builder.Services.AddHostedService<CryptoExchRateUpdateBGService>();
 //Scoped\\
+//auth
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+});
+
+
+//auth\\
+
+//Later Cors
+//builder.Services.AddCors();
+
+
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
@@ -78,6 +93,8 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddOpenApi();
 

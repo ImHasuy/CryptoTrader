@@ -5,7 +5,7 @@ namespace CryptoTrade.Entities
     public class Crypto
     {
         [Required,Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = new Guid();
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]

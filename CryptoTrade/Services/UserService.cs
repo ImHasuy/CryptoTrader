@@ -93,6 +93,12 @@ namespace CryptoTrade.Services
             
             return await GenerateToken(user);
         }
+
+        /// <summary>
+        /// Generates a JWT token for the user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<string> GenerateToken(User user)
         {
             var id = await GetClaimsIdentity(user);

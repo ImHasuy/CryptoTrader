@@ -1,6 +1,7 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
 using CryptoTrade.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using NuGet.Protocol;
@@ -13,7 +14,7 @@ namespace CryptoTrade.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[Controller]")]
-    //[Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
 
@@ -33,6 +34,7 @@ namespace CryptoTrade.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("UserById/{userid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUserById([FromRoute] string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -60,6 +62,7 @@ namespace CryptoTrade.Controllers
         /// <returns>It returns which indicates the result of the action</returns>
         [HttpPost]
         [Route("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]UserCreateDto userCreateDto)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -86,6 +89,7 @@ namespace CryptoTrade.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
             ApiResponse apiResponse = new ApiResponse();

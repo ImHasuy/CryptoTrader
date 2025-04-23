@@ -14,7 +14,7 @@ namespace CryptoTrade.Entities
         [Required]
         public string UserName { get; set; } = string.Empty;
         [Required]
-        public Roles Role { get; set; } = Roles.Customer;
+        public Roles Role { get; set; } = Roles.User;
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
         [Required]
