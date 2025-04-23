@@ -40,7 +40,8 @@ namespace CryptoTrade.Services
         {
 
             _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+            _httpClient.DefaultRequestHeaders.Add("x-cg-demo-api-key", $"{_apiKey}");
+            _httpClient.DefaultRequestHeaders.Add("accept", "application/json");
             var url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,solana,polkadot,chainlink,uniswap,litecoin,dogecoin,ripple,stellar,tron,algorand,near,vechain&vs_currencies=usd";
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -61,11 +62,13 @@ namespace CryptoTrade.Services
                             {
                                 foreach (var kvp in data)
                                 {
-                                    var l_Crypto = _context.Cryptos.FirstOrDefault(x => x.Name == kvp.Key)!;
+                                    var l_Crypto = _context.Cryptos.FirstOrDefault(x => x.Name == kvp.Key);
+                                    if (l_Crypto == null) continue; // Skip to the next kvp if null, in case of a crypto is deleted previously
+
                                     l_Crypto.Value = kvp.Value.usd;
                                     _context.Cryptos.Update(l_Crypto);
 
-                                    //Log the updated values
+                                    // Log the updated values
                                     var CryptoLogValue = new ExchangeRateLog
                                     {
                                         Id = Guid.NewGuid(),
@@ -82,7 +85,6 @@ namespace CryptoTrade.Services
                         {
                             await FirstRun(data);
                         }
-                        Console.WriteLine();
                     }
                 }
                 catch (Exception ex)

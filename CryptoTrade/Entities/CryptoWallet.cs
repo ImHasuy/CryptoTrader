@@ -11,15 +11,15 @@ namespace CryptoTrade.Entities
 
         [ForeignKey("Wallet")]
         public Guid WalletId { get; set; }
-        public Wallet Wallet { get; set; } = new Wallet();
+        public Wallet Wallet { get; set; }
 
         [ForeignKey("Crypto")]
         public Guid CryptoId { get; set; }
-        public Crypto Crypto { get; set; } = new Crypto();
+        public Crypto Crypto { get; set; } 
         [Required]
-        public double Amount { get; set; }
+        public double Amount { get; set; } //It stores how much a crypto costed when i bougt
         [Required]
-        public double Value { get; set; }
-        public DateTime Date { get; set; }
+        public double Value { get; set; } //Stores the value of the crypto at the time of purchase
+        public DateTime Date { get; set; } //Stores when i managed last time my cryptos
     }
 }
