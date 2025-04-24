@@ -7,10 +7,8 @@ namespace CryptoTrade.Entities
     {
         [Required, Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-
-        [ForeignKey("Crypto")]
-        public Guid CryptoId { get; set; }
-        public Crypto Crypto { get; set; }
+        [Required]
+        public string CryptoId { get; set; }
         [Required]
         public double Value { get; set; }
         public DateTime Date { get; set; }

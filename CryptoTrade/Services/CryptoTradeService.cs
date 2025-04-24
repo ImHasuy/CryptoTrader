@@ -28,7 +28,7 @@ namespace CryptoTrade.Services
             {
                 var value = crypto.Value * createTradeDTO.Amount;
 
-                var existingwallet = await _context.CryptoWallets.FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.WalletId);
+                var existingwallet = await _context.CryptoWallets.FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.Wallet.Id);
                 //Check if the user has a wallet with the selected crypto
                 if (existingwallet == null)
                 {
@@ -36,20 +36,20 @@ namespace CryptoTrade.Services
                     {
                         throw new Exception($"Not enough balance in the wallet");
                     }
-                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.WalletId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
 
                     var subjectCrypto = new CryptoWallet
                     {
                         CryptoId = crypto.Id,
-                        WalletId = user.WalletId,
+                        WalletId = user.Wallet.Id,
                         Amount = createTradeDTO.Amount,
                         Value = crypto.Value,
                         Date = DateTime.Now
                     };
                     var Tradelog = new TransactionLog
                     {
-                        UserId = user.Id,
-                        CryptoId = crypto.Id,
+                        UserId = user.Id.ToString(),
+                        CryptoId = crypto.Id.ToString(),
                         Amount = createTradeDTO.Amount,
                         Value = crypto.Value,
                         IsBuy = true,
@@ -65,15 +65,15 @@ namespace CryptoTrade.Services
                 }
                 else
                 {
-                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.WalletId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
                     existingwallet.Amount += createTradeDTO.Amount;
                     existingwallet.Value = existingwallet.Value + value;
                     existingwallet.Date = DateTime.Now;
 
                     var Tradelog = new TransactionLog
                     {
-                        UserId = user.Id,
-                        CryptoId = crypto.Id,
+                        UserId = user.Id.ToString(),
+                        CryptoId = crypto.Id.ToString(),
                         Amount = createTradeDTO.Amount,
                         Value = value,
                         IsBuy = true,
@@ -100,12 +100,12 @@ namespace CryptoTrade.Services
             var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == sellTradeDTO.CryptoId);
             if (user != null && crypto != null)
             {
-                var existingwallet = await _context.CryptoWallets.FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.WalletId);
+                var existingwallet = await _context.CryptoWallets.FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.Wallet.Id);
                 if (existingwallet == null || existingwallet.Amount < sellTradeDTO.Amount)
                 {
                     throw new Exception($"User does not own the requied ammount of crypto / any of the selected crypto");
                 }
-                var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.WalletId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+                var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
 
                 var valuetoSell = crypto.Value * sellTradeDTO.Amount;//The User vill get this amount of money
                 existingwallet.Amount -= sellTradeDTO.Amount; //Decrease the amount of crypto in the Cryptowallet
@@ -113,8 +113,8 @@ namespace CryptoTrade.Services
 
                 var Tradelog = new TransactionLog
                 {
-                    UserId = user.Id,
-                    CryptoId = crypto.Id,
+                    UserId = user.Id.ToString(),
+                    CryptoId = crypto.Id.ToString(),
                     Amount = sellTradeDTO.Amount,
                     Value = crypto.Value,
                     IsBuy = false,

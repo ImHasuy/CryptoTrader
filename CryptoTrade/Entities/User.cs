@@ -19,9 +19,8 @@ namespace CryptoTrade.Entities
         public string Email { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
-
-        [ForeignKey("Wallet")]
-        public Guid WalletId { get; set; }
+        [Required]
+        public bool IsEnabled { get; set; } = true;
         public Wallet Wallet { get; set; } = new Wallet();
     }
 }

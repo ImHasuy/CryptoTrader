@@ -7,18 +7,15 @@ namespace CryptoTrade.Entities
     {
         [Required,Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
-        public User User { get; set; } 
-
-        [ForeignKey("Crypto")]
-        public Guid CryptoId { get; set; }
-        public Crypto Crypto { get; set; }
+        [Required]
+        public string UserId { get; set; }
+        [Required]
+        public string CryptoId { get; set; }
         [Required]
         public double Amount { get; set; }
         [Required]
         public double Value { get; set; }
+        [Required]
         public bool IsBuy { get; set; } //true if buy, false if sell
         public DateTime Date { get; set; }
     }

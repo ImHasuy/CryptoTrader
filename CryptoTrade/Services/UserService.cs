@@ -86,7 +86,7 @@ namespace CryptoTrade.Services
         public async Task<string> AuthenticateAsync(UserLoginDto userLoginDto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password) || user.IsEnabled == false)
             {
                 throw new UnauthorizedAccessException("Hibás E-mail cím vagy jelszó!");
             }

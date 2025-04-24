@@ -41,7 +41,7 @@ namespace CryptoTrade.Controllers
             try
             {
                 apiResponse.Data = await _unitOfWork.UserService.GetUserByIdAsync(userid);
-                return Ok(apiResponse);
+                return Ok(apiResponse.Data);
                 //Gets back with the User in the .Data
             }
             catch (Exception e)

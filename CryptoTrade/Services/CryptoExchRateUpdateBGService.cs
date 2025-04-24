@@ -71,8 +71,7 @@ namespace CryptoTrade.Services
                                     // Log the updated values
                                     var CryptoLogValue = new ExchangeRateLog
                                     {
-                                        Id = Guid.NewGuid(),
-                                        CryptoId = l_Crypto.Id,
+                                        CryptoId = l_Crypto.Id.ToString(),
                                         Value = kvp.Value.usd,
                                         Date = DateTime.UtcNow
                                     };
@@ -116,8 +115,7 @@ namespace CryptoTrade.Services
                         //Log the values 
                         var CryptoLogValue = new ExchangeRateLog
                         {
-                            Id = Guid.NewGuid(),
-                            CryptoId = temp_crypto.Id,
+                            CryptoId = temp_crypto.Id.ToString(),
                             Value = kvp.Value.usd,
                             Date = DateTime.UtcNow
                         };

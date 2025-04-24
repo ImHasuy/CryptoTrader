@@ -76,8 +76,9 @@ namespace CryptoTrade.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CryptoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CryptoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -86,8 +87,6 @@ namespace CryptoTrade.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CryptoId");
 
                     b.ToTable("ExchangeRateLogs");
                 });
@@ -101,8 +100,9 @@ namespace CryptoTrade.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("CryptoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CryptoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -110,17 +110,14 @@ namespace CryptoTrade.Migrations
                     b.Property<bool>("IsBuy")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Value")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CryptoId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TransactionLogs");
                 });
@@ -135,6 +132,9 @@ namespace CryptoTrade.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -146,9 +146,6 @@ namespace CryptoTrade.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("WalletId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -156,8 +153,6 @@ namespace CryptoTrade.Migrations
 
                     b.HasIndex("UserName")
                         .IsUnique();
-
-                    b.HasIndex("WalletId");
 
                     b.ToTable("Users");
                 });
@@ -171,7 +166,13 @@ namespace CryptoTrade.Migrations
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Wallets");
                 });
@@ -195,45 +196,21 @@ namespace CryptoTrade.Migrations
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("CryptoTrade.Entities.ExchangeRateLog", b =>
+            modelBuilder.Entity("CryptoTrade.Entities.Wallet", b =>
                 {
-                    b.HasOne("CryptoTrade.Entities.Crypto", "Crypto")
-                        .WithMany()
-                        .HasForeignKey("CryptoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Crypto");
-                });
-
-            modelBuilder.Entity("CryptoTrade.Entities.TransactionLog", b =>
-                {
-                    b.HasOne("CryptoTrade.Entities.Crypto", "Crypto")
-                        .WithMany()
-                        .HasForeignKey("CryptoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CryptoTrade.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Wallet")
+                        .HasForeignKey("CryptoTrade.Entities.Wallet", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Crypto");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("CryptoTrade.Entities.User", b =>
                 {
-                    b.HasOne("CryptoTrade.Entities.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("Wallet")
                         .IsRequired();
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("CryptoTrade.Entities.Wallet", b =>
