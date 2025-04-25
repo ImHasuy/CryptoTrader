@@ -22,7 +22,7 @@ namespace CryptoTrade.Services
 
         public async Task<bool> BuyCryptoAsync(CryptoTradeDTOtoFunc createTradeDTO)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == createTradeDTO.UserGuid);
+            var user = await _context.Users.Include(u=>u.Wallet).FirstOrDefaultAsync(u => u.Id.ToString() == createTradeDTO.UserGuid);
             var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == createTradeDTO.CryptoId);
             if (user != null && crypto != null)
             {
@@ -36,7 +36,13 @@ namespace CryptoTrade.Services
                     {
                         throw new Exception($"Not enough balance in the wallet");
                     }
-                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+
+                    var uservalet = user.Wallet.UserId.ToString();
+                    var valetuserid = _context.Wallets.Select(u => u.UserId.ToString());
+
+                   var l_walsdflet = await _context.Wallets.FirstOrDefaultAsync(u => u.UserId.ToString() == user.Wallet.UserId.ToString());
+
+                   var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.UserId.ToString() == user.Wallet.UserId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
 
                     var subjectCrypto = new CryptoWallet
                     {
@@ -96,7 +102,7 @@ namespace CryptoTrade.Services
 
         public async Task<bool> SellCryptoAsync(CryptoTradeDTOtoFunc sellTradeDTO)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == sellTradeDTO.UserGuid);
+            var user = await _context.Users.Include(u => u.Wallet).FirstOrDefaultAsync(u => u.Id.ToString() == sellTradeDTO.UserGuid);
             var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == sellTradeDTO.CryptoId);
             if (user != null && crypto != null)
             {

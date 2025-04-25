@@ -23,7 +23,7 @@ namespace CryptoTrade.Controllers
         }
 
         [HttpPost("buy")]
-        [Authorize(Roles = "User")]
+        [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> BuyCrypto([FromBody] CryptoTradeDTO createTradeDTO)
         {
             ApiResponse response = new ApiResponse();
@@ -46,7 +46,7 @@ namespace CryptoTrade.Controllers
         }
 
         [HttpPost("sell")]
-        [Authorize(Roles = "User")]
+        [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> SellCrypto([FromBody] CryptoTradeDTO createTradeDTO)
         {
             ApiResponse response = new ApiResponse();

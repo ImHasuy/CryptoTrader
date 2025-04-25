@@ -31,10 +31,15 @@ namespace CryptoTrade.Services
 
         public async Task<User> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            var tempUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
-            if (tempUser != null)
+            var EmilValid = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
+            var UserNameValid = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userCreateDto.UserName);
+            if (EmilValid != null)
             {
                 throw new Exception($"User with email {userCreateDto.Email} already exists");
+            }
+            if(UserNameValid != null)
+            {
+                throw new Exception($"User with username {userCreateDto.UserName} already exists");
             }
 
             var user = _mapper.Map<User>(userCreateDto);
@@ -49,6 +54,8 @@ namespace CryptoTrade.Services
         {
             var user = await GetUserByIdAsync(id);
             user.IsEnabled = false;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
             return true;
         }
 
@@ -85,19 +92,16 @@ namespace CryptoTrade.Services
             if (!string.IsNullOrEmpty(userUpdateDto.UserName))
             {
                 user.UserName = userUpdateDto.UserName;
-                _context.Users.Update(user);
             }
             if (!string.IsNullOrEmpty(userUpdateDto.Password))
             {
-                user.UserName = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
-                _context.Users.Update(user);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
             }
             if (!string.IsNullOrEmpty(userUpdateDto.Email))
             {
                 user.Email = userUpdateDto.Email;
-                _context.Users.Update(user);
             }
-
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return true;
         }

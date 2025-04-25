@@ -35,7 +35,7 @@ namespace CryptoTrade.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("UserById/{userid}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetUserById([FromRoute] string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -113,7 +113,7 @@ namespace CryptoTrade.Controllers
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpDelete]
         [Route("Delete")]
-        [Authorize(Roles = "User")]
+        [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> DeleteUser()
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -143,7 +143,7 @@ namespace CryptoTrade.Controllers
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPut]
         [Route("Update/{userid}")]
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto,string userid)
         {
             ApiResponse apiResponse = new ApiResponse();

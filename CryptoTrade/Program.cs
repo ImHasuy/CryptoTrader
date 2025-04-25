@@ -25,6 +25,10 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 
 //Scoped
 builder.Services.AddScoped<IUserServices, UserService>();
+builder.Services.AddScoped<ICryptoTradeService, CryptoTradeService>();
+builder.Services.AddScoped<IWalletService, WalletService>();
+//More to come here 
+
 builder.Services.AddScoped<IUnitOfWork, ProductionUnitOfWork>();
 builder.Services.AddHostedService<CryptoExchRateUpdateBGService>();
 //Scoped\\
@@ -32,7 +36,7 @@ builder.Services.AddHostedService<CryptoExchRateUpdateBGService>();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+    options.AddPolicy("AllUserPolicy", policy => policy.RequireRole("User" , "Admin"));
 });
 
 
