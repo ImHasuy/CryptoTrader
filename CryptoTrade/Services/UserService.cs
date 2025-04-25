@@ -31,6 +31,17 @@ namespace CryptoTrade.Services
 
         public async Task<User> CreateUserAsync(UserCreateDto userCreateDto)
         {
+            var EmilValid = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
+            var UserNameValid = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userCreateDto.UserName);
+            if (EmilValid != null)
+            {
+                throw new Exception($"User with email {userCreateDto.Email} already exists");
+            }
+            if(UserNameValid != null)
+            {
+                throw new Exception($"User with username {userCreateDto.UserName} already exists");
+            }
+
             var user = _mapper.Map<User>(userCreateDto);
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -39,9 +50,13 @@ namespace CryptoTrade.Services
 
         }
 
-        public Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
-            throw new NotImplementedException();
+            var user = await GetUserByIdAsync(id);
+            user.IsEnabled = false;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public Task<IEnumerable<User>> GetAllUsersAsync()
@@ -54,7 +69,7 @@ namespace CryptoTrade.Services
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByIdAsync(string id)
+        public async Task<User> GetUserByIdAsync(string id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
             if (user == null)
@@ -70,10 +85,25 @@ namespace CryptoTrade.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<bool> UpdateUserAsync(User user)
+     
+        public async Task<bool> UpdateUserAsync(UserUpdateDto userUpdateDto, string id)
         {
-            throw new NotImplementedException();
+            var user = await GetUserByIdAsync(id);
+            if (!string.IsNullOrEmpty(userUpdateDto.UserName))
+            {
+                user.UserName = userUpdateDto.UserName;
+            }
+            if (!string.IsNullOrEmpty(userUpdateDto.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
+            }
+            if (!string.IsNullOrEmpty(userUpdateDto.Email))
+            {
+                user.Email = userUpdateDto.Email;
+            }
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
 
@@ -86,7 +116,7 @@ namespace CryptoTrade.Services
         public async Task<string> AuthenticateAsync(UserLoginDto userLoginDto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password) || user.IsEnabled == false)
             {
                 throw new UnauthorizedAccessException("Hibás E-mail cím vagy jelszó!");
             }

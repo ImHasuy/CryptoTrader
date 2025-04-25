@@ -1,0 +1,27 @@
+﻿[
+  {
+    "UserName": "alice_wonder",
+    "Email": "alice@example.com",
+    "Password": "Almafa123"
+  },
+  {
+    "UserName": "bob_builder",
+    "Email": "bob@samplemail.com",
+    "Password": "Almafa123"
+  },
+  {
+    "UserName": "charlie.delta",
+    "Email": "charlie.d@example.org",
+    "Password": "Almafa123"
+  },
+  {
+    "UserName": "diana.prince",
+    "Email": "diana.p@domain.net",
+    "Password": "Almafa123"
+  },
+  {
+    "UserName": "eve_online",
+    "Email": "eve@cybermail.com",
+    "Password": "Almafa123"
+  }
+]

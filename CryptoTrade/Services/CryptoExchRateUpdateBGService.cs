@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Text.Json;
 using CryptoTrade.Context;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace CryptoTrade.Services
 {
@@ -71,8 +74,7 @@ namespace CryptoTrade.Services
                                     // Log the updated values
                                     var CryptoLogValue = new ExchangeRateLog
                                     {
-                                        Id = Guid.NewGuid(),
-                                        CryptoId = l_Crypto.Id,
+                                        CryptoId = l_Crypto.Id.ToString(),
                                         Value = kvp.Value.usd,
                                         Date = DateTime.UtcNow
                                     };
@@ -84,6 +86,7 @@ namespace CryptoTrade.Services
                         else
                         {
                             await FirstRun(data);
+                            await DummyDataInsert();
                         }
                     }
                 }
@@ -116,8 +119,7 @@ namespace CryptoTrade.Services
                         //Log the values 
                         var CryptoLogValue = new ExchangeRateLog
                         {
-                            Id = Guid.NewGuid(),
-                            CryptoId = temp_crypto.Id,
+                            CryptoId = temp_crypto.Id.ToString(),
                             Value = kvp.Value.usd,
                             Date = DateTime.UtcNow
                         };
@@ -132,5 +134,49 @@ namespace CryptoTrade.Services
                 
             }
         }
+
+
+        public async Task<bool> DummyDataInsert()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var userService = scope.ServiceProvider.GetService<IUserServices>();
+                var cryptoTradeService = scope.ServiceProvider.GetService<ICryptoTradeService>();
+                var cryptoList = await _context.Cryptos.ToListAsync();
+
+                
+                var jsondata = JsonSerializer.Deserialize<List<UserCreateDto>>(File.ReadAllText("./DummyDatas/DummyUsers.json"));
+                if (jsondata == null)
+                {
+                    throw new Exception("Error occuerd while inserting Dummy datas");
+                }
+                for (int i = 0; i < jsondata.Count; i++)
+                {
+                    var user = await userService.CreateUserAsync(jsondata[i]);
+                    await cryptoTradeService.BuyCryptoAsync(new CryptoTradeDTOtoFunc
+                    {
+                        UserGuid = user.Id.ToString(),
+                        CryptoId = cryptoList[i].Id.ToString(),
+                        Amount = ((double)(i)+30.17)/10000
+                    });
+                    await cryptoTradeService.BuyCryptoAsync(new CryptoTradeDTOtoFunc
+                    {
+                        UserGuid = user.Id.ToString(),
+                        CryptoId = cryptoList[i + 1].Id.ToString(),
+                        Amount = ((double)(i) + 31.43) / 10000
+                    });
+                    await cryptoTradeService.SellCryptoAsync(new CryptoTradeDTOtoFunc
+                    {
+                        UserGuid = user.Id.ToString(),
+                        CryptoId = cryptoList[i].Id.ToString(),
+                        Amount = ((double)(i) + 25.7) / 10000
+                    });
+                }
+            }
+            return true;
+        }
+
+
     }
 }

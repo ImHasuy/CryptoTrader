@@ -10,10 +10,13 @@ namespace CryptoTrade.Services
         {
             //User config
             CreateMap<User, UserCreateDto>().ReverseMap()
-                .ForMember(dest=> dest.Password, opt=>opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password))); //Encrypts the password
+                .ForMember(dest=> dest.Password, opt=>opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password)))//Encrypts the password
+                ; 
 
             //CreateTradeCrypto config
             CreateMap<CryptoTradeDTOtoFunc, CryptoTradeDTO>().ReverseMap();
+
+            //
 
 
         }
