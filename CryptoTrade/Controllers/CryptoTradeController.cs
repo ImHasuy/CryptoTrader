@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace CryptoTrade.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/trade")]
     [Authorize]
     public class CryptoTradeController : ControllerBase
     {
@@ -22,6 +22,11 @@ namespace CryptoTrade.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This endpoint allows a user to buy cryptocurrency.
+        /// </summary>
+        /// <param name="createTradeDTO"></param>
+        /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPost("buy")]
         [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> BuyCrypto([FromBody] CryptoTradeDTO createTradeDTO)
@@ -45,6 +50,11 @@ namespace CryptoTrade.Controllers
             }
         }
 
+        /// <summary>
+        /// This endpoint allows a user to sell cryptocurrency.
+        /// </summary>
+        /// <param name="createTradeDTO"></param>
+        /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPost("sell")]
         [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> SellCrypto([FromBody] CryptoTradeDTO createTradeDTO)
@@ -67,6 +77,8 @@ namespace CryptoTrade.Controllers
                 return BadRequest(response);
             }
         }
+
+
 
     }
 }

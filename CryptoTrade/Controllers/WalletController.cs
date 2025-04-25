@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CryptoTrade.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/wallet")]
     [Authorize]
     public class WalletController : ControllerBase
     {
