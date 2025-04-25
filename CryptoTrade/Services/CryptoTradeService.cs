@@ -139,10 +139,5 @@ namespace CryptoTrade.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<bool> SellCryptoAsync(string UserGuid)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

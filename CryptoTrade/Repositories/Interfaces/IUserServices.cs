@@ -13,8 +13,8 @@ namespace CryptoTrade.Repositories.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User> CreateUserAsync(UserCreateDto userCreateDto);
-        Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(int id);
+        Task<bool> UpdateUserAsync(UserUpdateDto userUpdateDto, string id);
+        Task<bool> DeleteUserAsync(string id);
         Task<bool> SaveChangesAsync();
 
     }

@@ -15,6 +15,8 @@ namespace CryptoTrade.Services
             //CreateTradeCrypto config
             CreateMap<CryptoTradeDTOtoFunc, CryptoTradeDTO>().ReverseMap();
 
+            //
+
 
         }
     }
