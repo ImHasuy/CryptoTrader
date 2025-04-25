@@ -153,7 +153,15 @@ namespace CryptoTrade.Services
                 }
                 for (int i = 0; i < jsondata.Count; i++)
                 {
-                    var user = await userService.CreateUserAsync(jsondata[i]);
+                    User user;
+                    if (i == 1)
+                    {
+                        user = await userService.CreateAdminAsync(jsondata[i]);
+                    }
+                    else {
+                        user = await userService.CreateUserAsync(jsondata[i]);
+                    }
+                        
                     await cryptoTradeService.BuyCryptoAsync(new CryptoTradeDTOtoFunc
                     {
                         UserGuid = user.Id.ToString(),

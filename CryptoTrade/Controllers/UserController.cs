@@ -32,7 +32,7 @@ namespace CryptoTrade.Controllers
         /// <summary>
         /// Gets back with the user which matches the id
         /// </summary>
-        /// <returns></returns>
+        /// <returns>It returns with the User</returns>
         [HttpGet]
         [Route("UserById/{userid}")]
         [Authorize(Policy = "AdminPolicy")]
@@ -142,7 +142,7 @@ namespace CryptoTrade.Controllers
         /// <param name="userid">The subject UserId to change</param>
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPut]
-        [Route("Update/{userid}")]
+        [Route("{userid}")]
         [Authorize(Policy = "AllUserPolicy")]
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto,string userid)
         {

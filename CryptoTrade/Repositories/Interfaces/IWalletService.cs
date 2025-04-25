@@ -1,11 +1,12 @@
-﻿using CryptoTrade.Entities;
+﻿using CryptoTrade.DTOs;
+using CryptoTrade.Entities;
 
 namespace CryptoTrade.Repositories.Interfaces
 {
     public interface IWalletService
     {
-        Task<Wallet?> GetUserByIdAsync(string id);
-        Task<Wallet?> UpdateWalletAsync(string id);
-        Task<Wallet?> DeleteWalletAsync(string id);
+        Task<WalletGetDto> GetWalletByUserIdAsync(string id);
+        Task<string> TopUpWalletBalanceAsync(string id, WalletTopUpDto walletTopUpDto);
+        Task<string> DeleteWalletAsync(string id);
     }
 }
