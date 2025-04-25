@@ -20,7 +20,7 @@ namespace CryptoTrade.Repositories
             _mapper = mapper;
             _configuration = configuration;
             userServices = new UserService(_context, _mapper,_configuration );
-            walletService = new WalletService(); //Later _context, _mapper, _configuration
+            walletService = new WalletService(_context, _mapper, _configuration); //Later _context, _mapper, _configuration
             cryptoTradeService = new CryptoTradeService(_context, _mapper, _configuration); // same here
         }
 

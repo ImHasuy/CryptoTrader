@@ -16,8 +16,12 @@ namespace CryptoTrade.Services
             //CreateTradeCrypto config
             CreateMap<CryptoTradeDTOtoFunc, CryptoTradeDTO>().ReverseMap();
 
-            //
+            //Wallet config
+            CreateMap<Wallet, WalletGetDto>().ReverseMap();
 
+            //CryptoWalletGetr
+            CreateMap<CryptoWallet, CryptoWalletGetDto>()
+                .ForMember(dest => dest.CryptoName, opt => opt.MapFrom(src => src.Crypto.Name));
 
         }
     }

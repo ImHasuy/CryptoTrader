@@ -15,5 +15,5 @@ namespace CryptoTrade.Entities
         [Required]
         public double Balance { get; set; } = 1000.0;
         public List<CryptoWallet> OwnedCryptos { get; set; } = new List<CryptoWallet>();
-    }
+    }  
 }

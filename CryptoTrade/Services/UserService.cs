@@ -31,9 +31,9 @@ namespace CryptoTrade.Services
 
         public async Task<User> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            var EmilValid = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
+            var EmailValid = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
             var UserNameValid = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userCreateDto.UserName);
-            if (EmilValid != null)
+            if (EmailValid != null)
             {
                 throw new Exception($"User with email {userCreateDto.Email} already exists");
             }
@@ -43,6 +43,27 @@ namespace CryptoTrade.Services
             }
 
             var user = _mapper.Map<User>(userCreateDto);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+
+        }
+        public async Task<User> CreateAdminAsync(UserCreateDto userCreateDto)
+        {
+            var EmailValid = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
+            var UserNameValid = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userCreateDto.UserName);
+            if (EmailValid != null)
+            {
+                throw new Exception($"User with email {userCreateDto.Email} already exists");
+            }
+            if (UserNameValid != null)
+            {
+                throw new Exception($"User with username {userCreateDto.UserName} already exists");
+            }
+
+            var user = _mapper.Map<User>(userCreateDto);
+            user.Role = Roles.Admin;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
@@ -134,7 +155,7 @@ namespace CryptoTrade.Services
             var id = await GetClaimsIdentity(user);
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var exp = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtSettings:ExpiresInDays"]));
+            var exp = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["JwtSettings:ExpiresInMinutes"]));
             var token = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], id.Claims, expires: exp, signingCredentials: creds);
             
             return new JwtSecurityTokenHandler().WriteToken(token);
