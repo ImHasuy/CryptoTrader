@@ -84,9 +84,10 @@ An assignment for the Advanced Programming II. course. The topic of the assignme
 
 # Notes 📚
 
-On the first launch, the application automatically fills the database with sample data.
-Among the users, the one with the email address bob@samplemail.com has Admin privileges, while all other users have only User privileges. 
-The password for all users is **Almafa123**. <br>
-Every 60 seconds, the application automatically fetches the latest crypto exchange rates via an API.
+* On the first launch, the application automatically fills the database with sample data.
+* Some endpoints require admin privileges, so I recommend using a User with Admin privileges.
+* Among the sample users, the one with the email address bob@samplemail.com has Admin privileges, while all other users have only User privileges. 
+* The password for all users is **Almafa123**. <br>
+* Every 60 seconds, the application automatically fetches the latest crypto exchange rates via an API.
 
 
