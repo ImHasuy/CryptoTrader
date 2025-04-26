@@ -1,6 +1,6 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -28,7 +28,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var temp = await _unitOfWork.ProfitService.GetAllProfitAsync(userid)!;
+                var temp = await _unitOfWork.ProfitRepository.GetAllProfitAsync(userid)!;
                 apiResponse.Message= $"The Overall Profit/Loss of the user with id {userid} is {temp}";
                 return Ok(apiResponse);
             }
@@ -52,7 +52,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.ProfitService.GetDetailedProfitAsync(userid)!;
+                apiResponse.Data = await _unitOfWork.ProfitRepository.GetDetailedProfitAsync(userid)!;
                 return Ok(apiResponse);
             }
             catch (Exception e)

@@ -1,6 +1,6 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -41,7 +41,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.UserService.GetUserByIdAsync(userid);
+                apiResponse.Data = await _unitOfWork.UserRepository.GetUserByIdAsync(userid);
                 return Ok(apiResponse);
                 //Gets back with the User in the .Data
             }
@@ -69,7 +69,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                await _unitOfWork.UserService.CreateUserAsync(userCreateDto);
+                await _unitOfWork.UserRepository.CreateUserAsync(userCreateDto);
                 apiResponse.Message = "User Created Successfully";
                 return Ok(apiResponse);
             }
@@ -95,7 +95,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var token = await _unitOfWork.UserService.AuthenticateAsync(userLoginDto);
+                var token = await _unitOfWork.UserRepository.AuthenticateAsync(userLoginDto);
                 apiResponse.Message =token;
                 return Ok(apiResponse);
             }
@@ -120,7 +120,7 @@ namespace CryptoTrade.Controllers
             try
             {
                 var id = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                if(await _unitOfWork.UserService.DeleteUserAsync(id))
+                if(await _unitOfWork.UserRepository.DeleteUserAsync(id))
                 {
                     apiResponse.Message = "User succesfully deleted";
                     return Ok(apiResponse);
@@ -150,7 +150,7 @@ namespace CryptoTrade.Controllers
             try
             {
                 //var id = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;             Later
-                await _unitOfWork.UserService.UpdateUserAsync(userUpdateDto, userid);
+                await _unitOfWork.UserRepository.UpdateUserAsync(userUpdateDto, userid);
                 apiResponse.Message = "The update was succesfull";
                 return Ok(apiResponse);
             }

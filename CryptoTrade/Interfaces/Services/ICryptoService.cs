@@ -12,5 +12,7 @@ namespace CryptoTrade.Repositories.Interfaces
         Task<string> DeletCryptoByIdAsync(string id);
         Task<List<ExchangeRateLog>> GetAllExchangeRateAsync();
         Task<string> UpdateCryptoByIdAsync(CryptoUpdateDTO cryptoUpdateDTO);
+        Task<List<ExchangeRateLog>> GetCryptoLogsByIdAsync(string cryptoid);
+
     }
 }

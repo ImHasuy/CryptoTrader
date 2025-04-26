@@ -1,5 +1,5 @@
 ﻿using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -26,7 +26,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.PortfolioService.GetPortfolioAsync(userid);
+                apiResponse.Data = await _unitOfWork.PortfolioRepository.GetPortfolioAsync(userid);
                 return Ok(apiResponse);
             }
             catch (Exception ex)

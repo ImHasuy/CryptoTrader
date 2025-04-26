@@ -1,6 +1,6 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -27,7 +27,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var Cryptos = await _unitOfWork.CryptoService.GetCryptosAsync();
+                var Cryptos = await _unitOfWork.CryptosRepository.GetCryptosAsync();
                 apiResponse.Data = Cryptos;
                 return Ok(apiResponse);
             }
@@ -51,7 +51,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.CryptoService.GetCryptoByIdAsync(cryptoid);
+                apiResponse.Data = await _unitOfWork.CryptosRepository.GetCryptoByIdAsync(cryptoid);
                 return Ok(apiResponse);
             }
             catch (Exception e)
@@ -73,7 +73,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Message = await _unitOfWork.CryptoService.AddNewCryptoAsync(cryptoCreateDTO)!;
+                apiResponse.Message = await _unitOfWork.CryptosRepository.AddNewCryptoAsync(cryptoCreateDTO)!;
 
                 return Ok(apiResponse);
             }
@@ -97,7 +97,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Message = await _unitOfWork.CryptoService.DeletCryptoByIdAsync(cryptoid)!;
+                apiResponse.Message = await _unitOfWork.CryptosRepository.DeletCryptoByIdAsync(cryptoid)!;
 
                 return Ok(apiResponse);
             }

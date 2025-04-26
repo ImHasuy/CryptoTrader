@@ -10,12 +10,10 @@ namespace CryptoTrade.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
-        public ProfitService(AppDbContext context, IMapper mapper, IConfiguration configuration)
+        public ProfitService(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration;
         }
 
         public async Task<double> GetAllProfitAsync(string id)

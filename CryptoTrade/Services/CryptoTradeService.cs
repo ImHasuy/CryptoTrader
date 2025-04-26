@@ -11,12 +11,10 @@ namespace CryptoTrade.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
-        public CryptoTradeService(AppDbContext context, IMapper mapper, IConfiguration configuration)
+        public CryptoTradeService(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration;
 
         }
 
@@ -37,12 +35,7 @@ namespace CryptoTrade.Services
                         throw new Exception($"Not enough balance in the wallet");
                     }
 
-                    var uservalet = user.Wallet.UserId.ToString();
-                    var valetuserid = _context.Wallets.Select(u => u.UserId.ToString());
-
-                   var l_walsdflet = await _context.Wallets.FirstOrDefaultAsync(u => u.UserId.ToString() == user.Wallet.UserId.ToString());
-
-                   var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.UserId.ToString() == user.Wallet.UserId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+                    var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.UserId.ToString() == user.Wallet.UserId.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
 
                     var subjectCrypto = new CryptoWallet
                     {
@@ -106,14 +99,16 @@ namespace CryptoTrade.Services
             var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == sellTradeDTO.CryptoId);
             if (user != null && crypto != null)
             {
-                var existingwallet = await _context.CryptoWallets.FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.Wallet.Id);
+                var existingwallet = await _context.CryptoWallets
+                    .FirstOrDefaultAsync(c => c.CryptoId == crypto.Id && c.WalletId == user.Wallet.Id);
                 if (existingwallet == null || existingwallet.Amount < sellTradeDTO.Amount)
                 {
                     throw new Exception($"User does not own the requied ammount of crypto / any of the selected crypto");
                 }
-                var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
+                var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) 
+                    ?? throw new InvalidOperationException("Wallet not found.");
 
-                var valuetoSell = crypto.Value * sellTradeDTO.Amount;//The User vill get this amount of money
+                var valuetoSell = crypto.Value * sellTradeDTO.Amount;//The User will get this amount of money
                 existingwallet.Amount -= sellTradeDTO.Amount; //Decrease the amount of crypto in the Cryptowallet
                 existingwallet.Date = DateTime.Now; //Update the date of the last transaction
 
@@ -141,9 +136,5 @@ namespace CryptoTrade.Services
             }
         }
 
-        public Task<bool> GetCryptoPortofolioAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

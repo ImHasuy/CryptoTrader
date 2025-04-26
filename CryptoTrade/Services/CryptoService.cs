@@ -11,12 +11,10 @@ namespace CryptoTrade.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
-        public CryptoService(AppDbContext context, IMapper mapper, IConfiguration configuration)
+        public CryptoService(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration;
 
         }
 
@@ -61,6 +59,12 @@ namespace CryptoTrade.Services
         public async Task<List<ExchangeRateLog>> GetAllExchangeRateAsync()
         {
             return await _context.ExchangeRateLogs.ToListAsync();
+        }
+
+        
+        public async Task<List<ExchangeRateLog>> GetCryptoLogsByIdAsync(string cryptoid)
+        {
+          return await _context.ExchangeRateLogs.Where(x=>x.CryptoId == cryptoid).ToListAsync();
         }
 
     }

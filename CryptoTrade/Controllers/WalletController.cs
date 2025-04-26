@@ -1,6 +1,6 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +31,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var temp = await _unitOfWork.WalletService.GetWalletByUserIdAsync(userid);
+                var temp = await _unitOfWork.WalletRepository.GetWalletByUserIdAsync(userid);
                 apiResponse.Data = temp;
                 return Ok(apiResponse);
             }
@@ -57,7 +57,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var temp = await _unitOfWork.WalletService.TopUpWalletBalanceAsync(userid,walletTopUpDto);
+                var temp = await _unitOfWork.WalletRepository.TopUpWalletBalanceAsync(userid,walletTopUpDto);
                 apiResponse.Message = temp;
                 return Ok(apiResponse);
             }
@@ -82,7 +82,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var temp = await _unitOfWork.WalletService.DeleteWalletAsync(userid);
+                var temp = await _unitOfWork.WalletRepository.DeleteWalletAsync(userid);
                 apiResponse.Message = temp;
                 return Ok(apiResponse);
             }

@@ -1,7 +1,7 @@
 using CryptoTrade.Context;
-using CryptoTrade.Repositories;
 using CryptoTrade.Repositories.Interfaces;
 using CryptoTrade.Services;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,18 +19,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("ConnectionAtHome");
+    var connectionString = builder.Configuration.GetConnectionString("ConnectionAtsecondHome");
     optionsBuilder.UseSqlServer(connectionString);
 });
 
 //Scoped
-builder.Services.AddScoped<IUserServices, UserService>();
-builder.Services.AddScoped<ICryptoTradeService, CryptoTradeService>();
-builder.Services.AddScoped<IWalletService, WalletService>();
-//More to come here 
-
-builder.Services.AddScoped<IUnitOfWork, ProductionUnitOfWork>();
-builder.Services.AddHostedService<CryptoExchRateUpdateBGService>();
+builder.Services.AddServices();
 //Scoped\\
 //auth
 builder.Services.AddAuthorization(options =>

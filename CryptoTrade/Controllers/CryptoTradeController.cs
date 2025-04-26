@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -38,7 +38,7 @@ namespace CryptoTrade.Controllers
                 var temp = _mapper.Map<CryptoTradeDTOtoFunc>(createTradeDTO);
                 temp.UserGuid = l_userId;
    
-                var result = await _unitOfWork.CryptoTradeService.BuyCryptoAsync(temp);
+                var result = await _unitOfWork.CryptoTradeRepository.BuyCryptoAsync(temp);
                 response.Message = "Crypto bought successfully";
                 return Ok(response);
             }
@@ -66,7 +66,7 @@ namespace CryptoTrade.Controllers
                 var temp = _mapper.Map<CryptoTradeDTOtoFunc>(createTradeDTO);
                 temp.UserGuid = l_userId;
 
-                var result = await _unitOfWork.CryptoTradeService.SellCryptoAsync(temp);
+                var result = await _unitOfWork.CryptoTradeRepository.SellCryptoAsync(temp);
                 response.Message = "Crypto sold successfully";
                 return Ok(response);
             }

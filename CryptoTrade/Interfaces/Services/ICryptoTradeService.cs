@@ -6,6 +6,5 @@ namespace CryptoTrade.Repositories.Interfaces
     {
         Task<bool> BuyCryptoAsync(CryptoTradeDTOtoFunc CreateTradeDTO);
         Task<bool> SellCryptoAsync(CryptoTradeDTOtoFunc createTradeDTO);
-        Task<bool> GetCryptoPortofolioAsync(int id); //later bool has to be changet to the proper dto
     }
 }

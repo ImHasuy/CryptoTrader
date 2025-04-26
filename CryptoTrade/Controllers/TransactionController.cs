@@ -1,5 +1,5 @@
 ﻿using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -27,7 +27,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.TransactionLogService.ListTransactionsAsync(userid);
+                apiResponse.Data = await _unitOfWork.TransactionRepository.ListTransactionsAsync(userid);
                 return Ok(apiResponse);
             }
             catch (Exception e)
@@ -50,7 +50,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.TransactionLogService.GetTransactionDetailsAsync(transactionid);
+                apiResponse.Data = await _unitOfWork.TransactionRepository.GetTransactionDetailsAsync(transactionid);
                 return Ok(apiResponse);
             }
             catch (Exception e)

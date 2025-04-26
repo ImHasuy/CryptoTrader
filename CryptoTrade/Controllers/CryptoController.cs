@@ -1,6 +1,6 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
-using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -29,7 +29,7 @@ namespace CryptoTrade.Controllers
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Message = await _unitOfWork.CryptoService.UpdateCryptoByIdAsync(cryptoUpdateDTO)!;
+                apiResponse.Message = await _unitOfWork.CryptoRepository.UpdateCryptoByIdAsync(cryptoUpdateDTO)!;
 
                 return Ok(apiResponse);
             }
@@ -41,18 +41,20 @@ namespace CryptoTrade.Controllers
             return BadRequest(apiResponse);
         }
 
+
         /// <summary>
-        /// Gets back with the list of all Exchange Rates
+        /// Get the exchange rate history of the given crypto
         /// </summary>
-        /// <returns>Returns all of the Cryptos Exchange rate</returns>
+        /// <param name="cryptoid"></param>
+        /// <returns>Returns the logs of the crypto matches the cryptoid</returns>
         [HttpGet]
-        [Route("price")]
-        public async Task<IActionResult> GetExchangeRates()
+        [Route("price/histroy/{cryptoid}")]
+        public async Task<IActionResult> GetExchangeRates(string cryptoid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.CryptoService.GetAllExchangeRateAsync()!;
+                apiResponse.Data = await _unitOfWork.CryptoRepository.GetCryptoLogsByIdAsync(cryptoid)!;
                 return Ok(apiResponse);
             }
             catch (Exception e)

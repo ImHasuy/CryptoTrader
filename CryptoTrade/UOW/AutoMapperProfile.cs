@@ -2,7 +2,7 @@
 using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
 
-namespace CryptoTrade.Services
+namespace CryptoTrade.UOW
 {
     public class AutoMapperProfile: Profile
     {
