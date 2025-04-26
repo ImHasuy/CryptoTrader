@@ -34,7 +34,7 @@ namespace CryptoTrade.Controllers
         /// </summary>
         /// <returns>It returns with the User</returns>
         [HttpGet]
-        [Route("UserById/{userid}")]
+        [Route("{userid}")]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetUserById([FromRoute] string userid)
         {
@@ -62,7 +62,7 @@ namespace CryptoTrade.Controllers
         /// <param name="userCreateDto">The details for the user to be created.</param>
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]UserCreateDto userCreateDto)
         {
