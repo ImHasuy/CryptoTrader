@@ -14,7 +14,7 @@ namespace CryptoTrade.Controllers
     /// This controller is responsible for handling user-related operations such as registration and fetching user details.
     /// </summary>
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/users")]
     [Authorize]
     public class UserController : ControllerBase
     {

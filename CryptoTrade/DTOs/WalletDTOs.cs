@@ -13,9 +13,9 @@ namespace CryptoTrade.DTOs
     public class CryptoWalletGetDto
     {
         public string CryptoName { get; set; }
-        public double Amount { get; set; } //It stores how much a crypto costed when i bougt
-        public double Value { get; set; } //Stores the value of the crypto at the time of purchase
-        public DateTime Date { get; set; } //Stores when i managed last time my cryptos
+        public double Amount { get; set; } 
+        public double Value { get; set; }
+        public DateTime Date { get; set; } 
     }
     public class WalletTopUpDto
     {

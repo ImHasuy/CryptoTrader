@@ -6,31 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace CryptoTrade.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
-    public class CryptoController : ControllerBase
+    [Route("api/profit")]
+    public class ProfitController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CryptoController(IUnitOfWork unitOfWork)
+        public ProfitController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-
-        /// <summary>
-        /// Update the crypto with the given id
-        /// </summary>
-        /// <param name="cryptoUpdateDTO"></param>
-        /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPut]
-        [Route("price")]
-        public async Task<IActionResult> UpdateCrypto(CryptoUpdateDTO cryptoUpdateDTO)
+        [Route("price/{userid}")]
+        public async Task<IActionResult> OverAllProfit(string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Message = await _unitOfWork.CryptoService.UpdateCryptoByIdAsync(cryptoUpdateDTO)!;
-
+                var temp = await _unitOfWork.ProfitService.GetAllProfitAsync(userid)!;
+                apiResponse.Message= $"The Overall Profit/Loss of the user with id {userid} is {temp}";
                 return Ok(apiResponse);
             }
             catch (Exception e)
@@ -41,14 +35,14 @@ namespace CryptoTrade.Controllers
             return BadRequest(apiResponse);
         }
 
-        [HttpGet]
-        [Route("price")]
-        public async Task<IActionResult> GetExchangeRates()
+        [HttpPut]
+        [Route("price/details/{userid}")]
+        public async Task<IActionResult> GetOverDetailedProfitAsync(string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.CryptoService.GetAllExchangeRateAsync()!;
+                apiResponse.Data = await _unitOfWork.ProfitService.GetDetailedProfitAsync(userid)!;
                 return Ok(apiResponse);
             }
             catch (Exception e)
@@ -58,5 +52,9 @@ namespace CryptoTrade.Controllers
             }
             return BadRequest(apiResponse);
         }
+
+
+
+        
     }
 }
