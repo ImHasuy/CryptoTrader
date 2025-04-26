@@ -10,5 +10,6 @@ namespace CryptoTrade.Repositories.Interfaces
         ICryptoService CryptoService { get; }
         IPortfolioService PortfolioService { get; }
         IProfitService ProfitService { get; }
+        ITransactionLogService TransactionLogService { get; }
     }
 }

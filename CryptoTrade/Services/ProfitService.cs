@@ -27,7 +27,9 @@ namespace CryptoTrade.Services
                 .ToListAsync();
 
             if (cryptos.Count == 0)
+            {
                 throw new Exception("The User dont have any Cryptos");
+            }
 
             return cryptos.Sum(c => (c.Crypto.Value - c.Value) * c.Amount);
         }

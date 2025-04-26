@@ -29,6 +29,14 @@ namespace CryptoTrade.Services
             //Portfolio config
             CreateMap<CryptoWallet, PortfolioDto>().ReverseMap();
 
+            //TransactionLog config
+            CreateMap<TransactionLog, TransactionLogGetDto>().ReverseMap();
+
+            CreateMap<TransactionLog, TransactionLogGetDetailedDto>()
+                .ForMember(dest => dest.TotalValue, opt => opt.MapFrom(src => (double)src.Value * src.Amount))
+                .ForMember(dest => dest.CryptoName, opt => opt.Ignore())
+                .ReverseMap();
+            
         }
     }
 }

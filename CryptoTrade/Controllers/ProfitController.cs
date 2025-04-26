@@ -16,6 +16,11 @@ namespace CryptoTrade.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// This endpoint allows a user to get the overall profit/loss of the user with the given Userid.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns>Returns the overall profit/loss</returns>
         [HttpPut]
         [Route("price/{userid}")]
         public async Task<IActionResult> OverAllProfit(string userid)
@@ -35,6 +40,11 @@ namespace CryptoTrade.Controllers
             return BadRequest(apiResponse);
         }
 
+        /// <summary>
+        /// This endpoint allows a user to get the detailed profit/loss of the user with the given Userid.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns>Returns a Json with the detailes of profit/loss</returns>
         [HttpPut]
         [Route("price/details/{userid}")]
         public async Task<IActionResult> GetOverDetailedProfitAsync(string userid)

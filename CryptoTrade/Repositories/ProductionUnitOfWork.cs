@@ -16,6 +16,7 @@ namespace CryptoTrade.Repositories
         ICryptoService cryptoService;
         IPortfolioService portfolioService;
         IProfitService profitService;
+        ITransactionLogService transactionLogService;
 
 
         public ProductionUnitOfWork(AppDbContext context, IMapper mapper, IConfiguration configuration )
@@ -29,6 +30,7 @@ namespace CryptoTrade.Repositories
             cryptoService = new CryptoService(_context, _mapper, _configuration);
             portfolioService = new PortfolioService(_context, _mapper, _configuration);
             profitService = new ProfitService(_context, _mapper, _configuration);
+            transactionLogService = new TransactionLogService(_context, _mapper, _configuration);
         }
 
         public IUserServices UserService => userServices;
@@ -37,6 +39,7 @@ namespace CryptoTrade.Repositories
         public ICryptoService CryptoService => cryptoService;
         public IPortfolioService PortfolioService => portfolioService;
         public IProfitService ProfitService => profitService;
+        public ITransactionLogService TransactionLogService => transactionLogService;
 
     }
 }

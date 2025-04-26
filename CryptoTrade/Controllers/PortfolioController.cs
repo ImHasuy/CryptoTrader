@@ -14,7 +14,11 @@ namespace CryptoTrade.Controllers
             _unitOfWork = unitOfWork;
         }
 
-
+        /// <summary>
+        /// Gets back with the portfolio of the user which matches the id
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns>Return the portfolio </returns>
         [HttpGet]
         [Route("{userid}")]
         public async Task<IActionResult> GetPortfolio(string userid)

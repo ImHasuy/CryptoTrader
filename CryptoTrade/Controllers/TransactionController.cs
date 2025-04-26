@@ -1,36 +1,33 @@
-﻿using CryptoTrade.DTOs;
-using CryptoTrade.Entities;
+﻿using CryptoTrade.Entities;
 using CryptoTrade.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
-    public class CryptoController : ControllerBase
+    [Route("api/transactions")]
+    public class TransactionController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CryptoController(IUnitOfWork unitOfWork)
+        public TransactionController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-
         /// <summary>
-        /// Update the crypto with the given id
+        ///Gets back with the transaction logs of the user which matches the id
         /// </summary>
-        /// <param name="cryptoUpdateDTO"></param>
-        /// <returns>It returns a response which indicates the result of the action</returns>
-        [HttpPut]
-        [Route("price")]
-        public async Task<IActionResult> UpdateCrypto(CryptoUpdateDTO cryptoUpdateDTO)
+        /// <param name="userid"></param>
+        /// <returns>Returns the logs in a list</returns>
+        [HttpGet]
+        [Route("{userid}")]
+        public async Task<IActionResult> LogTransactions(string userid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Message = await _unitOfWork.CryptoService.UpdateCryptoByIdAsync(cryptoUpdateDTO)!;
-
+                apiResponse.Data = await _unitOfWork.TransactionLogService.ListTransactionsAsync(userid);
                 return Ok(apiResponse);
             }
             catch (Exception e)
@@ -42,17 +39,18 @@ namespace CryptoTrade.Controllers
         }
 
         /// <summary>
-        /// Gets back with the list of all Exchange Rates
+        /// Gets back with the transaction log which matches the id
         /// </summary>
-        /// <returns>Returns all of the Cryptos Exchange rate</returns>
+        /// <param name="transactionid"></param>
+        /// <returns>Returns a transaction</returns>
         [HttpGet]
-        [Route("price")]
-        public async Task<IActionResult> GetExchangeRates()
+        [Route("details/{transactionid}")]
+        public async Task<IActionResult> GetTransactionById(string transactionid)
         {
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                apiResponse.Data = await _unitOfWork.CryptoService.GetAllExchangeRateAsync()!;
+                apiResponse.Data = await _unitOfWork.TransactionLogService.GetTransactionDetailsAsync(transactionid);
                 return Ok(apiResponse);
             }
             catch (Exception e)

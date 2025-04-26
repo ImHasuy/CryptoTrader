@@ -83,7 +83,7 @@ namespace CryptoTrade.Controllers
 
 
         /// <summary>
-        /// Login endpoitn to an existing user and return a JWT token.
+        /// Login endpoint to an existing user and returns a JWT token.
         /// </summary>
         /// <param name="userLoginDto"></param>
         /// <returns>It returns a response which indicates the result of the action</returns>
@@ -108,7 +108,7 @@ namespace CryptoTrade.Controllers
         }
 
         /// <summary>
-        /// This endpoint is used to Disable a user account.
+        /// This endpoint is used to Delete a user account.
         /// </summary>
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpDelete]
@@ -136,7 +136,7 @@ namespace CryptoTrade.Controllers
 
 
         /// <summary>
-        /// This endpoint updatein existing user infomations based on the provided ones.
+        /// This endpoint updates existing user infomations based on the provided ones.
         /// </summary>
         /// <param name="userUpdateDto">The provided informations to be updated</param>
         /// <param name="userid">The subject UserId to change</param>
