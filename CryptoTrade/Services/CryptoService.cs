@@ -47,5 +47,21 @@ namespace CryptoTrade.Services
 
             return "Crypto Deleted Successfully";
         }
+
+        
+        public async Task<string> UpdateCryptoByIdAsync(CryptoUpdateDTO cryptoUpdateDTO)
+        {
+            var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == cryptoUpdateDTO.id) ?? throw new Exception($"Crypto with {cryptoUpdateDTO.id} not found");
+            crypto.Value = cryptoUpdateDTO.Value;
+            _context.Cryptos.Update(crypto);
+            await _context.SaveChangesAsync();
+            return "Crypto Updated Successfully";
+        }
+
+        public async Task<List<ExchangeRateLog>> GetAllExchangeRateAsync()
+        {
+            return await _context.ExchangeRateLogs.ToListAsync();
+        }
+
     }
 }

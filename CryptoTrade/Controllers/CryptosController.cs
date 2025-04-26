@@ -22,7 +22,6 @@ namespace CryptoTrade.Controllers
         /// </summary>
         /// <returns>Returns all the cryptos</returns>
         [HttpGet]
-        [Route("Cryptos")]
         public async Task<IActionResult> GetCryptos()
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -46,7 +45,7 @@ namespace CryptoTrade.Controllers
         /// <param name="cryptoid"></param>
         /// <returns>Return the crypto's value and name matches the id</returns>
         [HttpGet]
-        [Route("Cryptos/{cryptoid}")]
+        [Route("{cryptoid}")]
         public async Task<IActionResult> GetCryptoById(string cryptoid)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -69,7 +68,6 @@ namespace CryptoTrade.Controllers
         /// <param name="cryptoCreateDTO"></param>
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpPost]
-        [Route("Cryptos")]
         public async Task<IActionResult> AddNewCrypto(CryptoDTO cryptoCreateDTO)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -93,7 +91,7 @@ namespace CryptoTrade.Controllers
         /// <param name="cryptoid"></param>
         /// <returns>It returns a response which indicates the result of the action</returns>
         [HttpDelete]
-        [Route("Cryptos/{cryptoid}")]
+        [Route("{cryptoid}")]
         public async Task<IActionResult> DeletCryptoById(string cryptoid)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -112,4 +110,5 @@ namespace CryptoTrade.Controllers
         }
 
     }
+    
 }
