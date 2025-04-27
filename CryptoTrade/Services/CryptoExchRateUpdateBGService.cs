@@ -9,6 +9,7 @@ using CryptoTrade.Repositories.Interfaces;
 using CryptoTrade.DTOs;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CryptoTrade.Services
 {
 
@@ -144,8 +145,8 @@ namespace CryptoTrade.Services
                 var userService = scope.ServiceProvider.GetService<IUserServices>();
                 var cryptoTradeService = scope.ServiceProvider.GetService<ICryptoTradeService>();
                 var cryptoList = await _context.Cryptos.ToListAsync();
+                var random = new Random();
 
-                
                 var jsondata = JsonSerializer.Deserialize<List<UserCreateDto>>(File.ReadAllText("./DummyDatas/DummyUsers.json"));
                 if (jsondata == null)
                 {
@@ -161,24 +162,26 @@ namespace CryptoTrade.Services
                     else {
                         user = await userService.CreateUserAsync(jsondata[i]);
                     }
-                        
+
+                    var cryptoAmountForSold = random.NextDouble() * 32 + 1;
+
                     await cryptoTradeService.BuyCryptoAsync(new CryptoTradeDTOtoFunc
                     {
                         UserGuid = user.Id.ToString(),
                         CryptoId = cryptoList[i].Id.ToString(),
-                        Amount = ((double)(i)+30.17)/10000
+                        Amount = ((double)(i) + cryptoAmountForSold) /10000
                     });
                     await cryptoTradeService.BuyCryptoAsync(new CryptoTradeDTOtoFunc
                     {
                         UserGuid = user.Id.ToString(),
                         CryptoId = cryptoList[i + 1].Id.ToString(),
-                        Amount = ((double)(i) + 31.43) / 10000
+                        Amount = ((double)(i) + (random.NextDouble() * 32 + 1)) / 10000
                     });
                     await cryptoTradeService.SellCryptoAsync(new CryptoTradeDTOtoFunc
                     {
                         UserGuid = user.Id.ToString(),
                         CryptoId = cryptoList[i].Id.ToString(),
-                        Amount = ((double)(i) + 25.7) / 10000
+                        Amount = ((double)(i) + cryptoAmountForSold) / 11521
                     });
                 }
             }

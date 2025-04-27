@@ -33,7 +33,11 @@ namespace CryptoTrade.Services
 
         public async Task<List<TransactionLogGetDto>> ListTransactionsAsync(string id)
         {
-            var Tran_log = await _context.TransactionLogs.Where(x => x.UserId == id).ToListAsync() ?? throw new Exception($"Transactions related to {id} not found");
+            var Tran_log = await _context.TransactionLogs.Where(x => x.UserId == id).ToListAsync();
+            if (Tran_log.Count == 0 || Tran_log == null)
+            {
+                throw new Exception($"Transactions related to {id} not found");
+            }
             var return_val = Tran_log.Select(_mapper.Map<TransactionLogGetDto>).ToList();
             return return_val;
         }

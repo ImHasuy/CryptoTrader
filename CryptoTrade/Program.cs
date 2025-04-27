@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("ConnectionAtsecondHome");
+    var connectionString = builder.Configuration.GetConnectionString("ConnectionAtHome");
     optionsBuilder.UseSqlServer(connectionString);
 });
 
