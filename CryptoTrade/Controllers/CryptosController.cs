@@ -8,7 +8,6 @@ namespace CryptoTrade.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    //[]
     public class CryptosController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +22,6 @@ namespace CryptoTrade.Controllers
         /// </summary>
         /// <returns>Returns all the cryptos</returns>
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetCryptos()
         {
             ApiResponse apiResponse = new ApiResponse();
