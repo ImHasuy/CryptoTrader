@@ -1,6 +1,7 @@
 ﻿using CryptoTrade.DTOs;
 using CryptoTrade.Entities;
 using CryptoTrade.UOW;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoTrade.Controllers
@@ -22,6 +23,7 @@ namespace CryptoTrade.Controllers
         /// </summary>
         /// <returns>Returns all the cryptos</returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCryptos()
         {
             ApiResponse apiResponse = new ApiResponse();

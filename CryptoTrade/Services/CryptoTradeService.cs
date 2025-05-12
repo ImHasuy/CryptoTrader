@@ -66,7 +66,7 @@ namespace CryptoTrade.Services
                 {
                     var l_wallet = await _context.Wallets.FirstOrDefaultAsync(u => u.Id.ToString() == user.Wallet.Id.ToString()) ?? throw new InvalidOperationException("Wallet not found.");
                     existingwallet.Amount += createTradeDTO.Amount;
-                    existingwallet.Value = existingwallet.Value + value;
+                    existingwallet.Value = crypto.Value;
                     existingwallet.Date = DateTime.Now;
 
                     var Tradelog = new TransactionLog
