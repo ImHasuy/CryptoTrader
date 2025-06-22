@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250424191119_EntityChangedReinit")]
-    partial class EntityChangedReinit
+    [Migration("20250622100257_cashback")]
+    partial class cashback
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,23 @@ namespace CryptoTrade.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CryptoTrade.Entities.CashBack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("min")
+                        .HasColumnType("int");
+
+                    b.Property<int>("percent")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cashbacks");
+                });
 
             modelBuilder.Entity("CryptoTrade.Entities.Crypto", b =>
                 {

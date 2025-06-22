@@ -184,6 +184,15 @@ namespace CryptoTrade.Services
                         Amount = ((double)(i) + cryptoAmountForSold) / 11521
                     });
                 }
+                
+                
+                var CashBackDatas = JsonSerializer.Deserialize<List<CashBack>>(File.ReadAllText("./DummyDatas/CashBack.json")) ?? throw new Exception("Error occuerd while inserting CashBack datas");
+                foreach (var item in CashBackDatas)
+                {
+                    await _context.AddAsync(item);
+                }
+                await _context.SaveChangesAsync();
+                
             }
             return true;
         }

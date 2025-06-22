@@ -22,6 +22,23 @@ namespace CryptoTrade.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CryptoTrade.Entities.CashBack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("min")
+                        .HasColumnType("int");
+
+                    b.Property<int>("percent")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cashbacks");
+                });
+
             modelBuilder.Entity("CryptoTrade.Entities.Crypto", b =>
                 {
                     b.Property<Guid>("Id")

@@ -6,11 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CryptoTrade.Migrations
 {
     /// <inheritdoc />
-    public partial class EntityChangedReinit : Migration
+    public partial class cashback : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Cashbacks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    min = table.Column<int>(type: "int", nullable: false),
+                    percent = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cashbacks", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Cryptos",
                 columns: table => new
@@ -150,6 +163,9 @@ namespace CryptoTrade.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Cashbacks");
+
             migrationBuilder.DropTable(
                 name: "CryptoWallets");
 

@@ -40,6 +40,7 @@ namespace CryptoTrade.Controllers
    
                 var result = await _unitOfWork.CryptoTradeRepository.BuyCryptoAsync(temp);
                 response.Message = "Crypto bought successfully";
+                response.Data = result;
                 return Ok(response);
             }
             catch (Exception ex)

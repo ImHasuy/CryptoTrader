@@ -18,7 +18,7 @@ namespace CryptoTrade.Repositories
             _mapper = mapper;
         }
 
-        public async Task<bool> BuyCryptoAsync(CryptoTradeDTOtoFunc CreateTradeDTO)
+        public async Task<ReturnTradeValue> BuyCryptoAsync(CryptoTradeDTOtoFunc CreateTradeDTO)
         {
             var manager = GetService();
             return await manager.BuyCryptoAsync(CreateTradeDTO);

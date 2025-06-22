@@ -1,0 +1,5 @@
+﻿[
+  { "min": 1000, "percent": 1 },
+  { "min": 3001, "percent": 2 },
+  { "min": 5001, "percent": 3 }
+]

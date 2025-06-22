@@ -18,7 +18,7 @@ namespace CryptoTrade.Services
 
         }
 
-        public async Task<bool> BuyCryptoAsync(CryptoTradeDTOtoFunc createTradeDTO)
+        public async Task<ReturnTradeValue> BuyCryptoAsync(CryptoTradeDTOtoFunc createTradeDTO)
         {
             var user = await _context.Users.Include(u=>u.Wallet).FirstOrDefaultAsync(u => u.Id.ToString() == createTradeDTO.UserGuid);
             var crypto = await _context.Cryptos.FirstOrDefaultAsync(c => c.Id.ToString() == createTradeDTO.CryptoId);
@@ -54,13 +54,36 @@ namespace CryptoTrade.Services
                         IsBuy = true,
                         Date = DateTime.Now
                     };
-
                     l_wallet.Balance -= value;
+                    List<CashBack> cashbackTresholds = await _context.Cashbacks.ToListAsync();
+                    var cashbackamount = 0.0;
+                    for (int i = cashbackTresholds.Count-1; 0 <= i; i--)
+                    {
+                        if (value > cashbackTresholds[i].min)
+                        {
+                            cashbackamount= (double)value * ((double)cashbackTresholds[i].percent / 100.0);
+                            l_wallet.Balance += cashbackamount;
+                            Console.WriteLine($"Cashback amount: {cashbackamount}");
+                            break;
+                        }
+                    }
+                    
+                    var returnObj = new ReturnTradeValue
+                    {
+                        UserId = user.Id,
+                        CryptoId = crypto.Id,
+                        Amount = createTradeDTO.Amount,
+                        CashBackAmount=cashbackamount,
+                        TotalValue= value,
+                        Date = DateTime.Now
+                    };
+
+                    
                     _context.Wallets.Update(l_wallet);
                     await _context.CryptoWallets.AddAsync(subjectCrypto);
                     await _context.TransactionLogs.AddAsync(Tradelog);
                     await _context.SaveChangesAsync();
-                    return true;
+                    return returnObj;
                 }
                 else
                 {
@@ -78,13 +101,37 @@ namespace CryptoTrade.Services
                         IsBuy = true,
                         Date = DateTime.Now
                     };
+                    
+                    List<CashBack> cashbackTresholds = await _context.Cashbacks.ToListAsync();
+                    var cashbackamount = 0.0;
+                    for (int i = cashbackTresholds.Count-1; 0 <= i; i--)
+                    {
+                        if (value > cashbackTresholds[i].min)
+                        {
+                            cashbackamount = (double)value * ((double)cashbackTresholds[i].percent / 100.0);
+                            l_wallet.Balance += cashbackamount;
+                            Console.WriteLine($"Cashback amount: {cashbackamount}");
+                            break;
+                        }
+                    }
+                    var returnObj = new ReturnTradeValue
+                    {
+                        UserId = user.Id,
+                        CryptoId = crypto.Id,
+                        Amount = createTradeDTO.Amount,
+                        CashBackAmount=cashbackamount,
+                        TotalValue= value,
+                        Date = DateTime.Now
+                    };
+                    
+                    
 
                     l_wallet.Balance -= value;
                     _context.Wallets.Update(l_wallet);
                     _context.CryptoWallets.Update(existingwallet);
                     await _context.TransactionLogs.AddAsync(Tradelog);
                     await _context.SaveChangesAsync();
-                    return true;
+                    return returnObj;
                 }
             }
             else
