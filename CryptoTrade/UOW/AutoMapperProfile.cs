@@ -37,6 +37,9 @@ namespace CryptoTrade.UOW
                 .ForMember(dest => dest.CryptoName, opt => opt.Ignore())
                 .ReverseMap();
             
+
+            //cashback config
+            CreateMap<CashBackDto, CashBack>().ReverseMap();
         }
     }
 }

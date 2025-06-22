@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CryptoTrade.Interfaces.Repositories;
 using CryptoTrade.Repositories.Interfaces;
+using CryptoTrade.Services;
 
 namespace CryptoTrade.UOW
 {
@@ -14,5 +15,7 @@ namespace CryptoTrade.UOW
         IPortfolioRepository PortfolioRepository { get; }
         IProfitRepository  ProfitRepository{ get; }
         ITransactionRepository  TransactionRepository{ get; }
+        ICashbackService CashbackService { get; }
+        ISavingsService SavingsService { get; }
     }
 }

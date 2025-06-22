@@ -2,6 +2,6 @@
 
 public class CashBackDto
 {
-    public int treshold { get; set; }
+    public int min { get; set; }
     public int percent { get; set; }
 }

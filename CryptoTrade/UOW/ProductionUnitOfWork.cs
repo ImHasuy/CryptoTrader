@@ -21,7 +21,8 @@ namespace CryptoTrade.UOW
         public IPortfolioRepository PortfolioRepository { get; }
         public IProfitRepository ProfitRepository { get; }
         public ITransactionRepository TransactionRepository { get; }
-
+        public ICashbackService CashbackService { get; }
+        public ISavingsService SavingsService { get; } 
 
 
         public ProductionUnitOfWork(AppDbContext context, IMapper mapper, IConfiguration configuration)
@@ -39,6 +40,8 @@ namespace CryptoTrade.UOW
             ProfitRepository = new ProfitRepository(_context, _mapper);
             TransactionRepository = new TransactionRepository(_context, _mapper);
             CryptosRepository = new CryptosRepository(_context, _mapper);
+            CashbackService = new CashbackService(_context, _mapper);
+            SavingsService = new SavingsService(_context, _mapper);
         }
 
   

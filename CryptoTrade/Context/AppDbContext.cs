@@ -12,6 +12,9 @@ namespace CryptoTrade.Context
         public DbSet<TransactionLog> TransactionLogs { get; set; }
         public DbSet<ExchangeRateLog> ExchangeRateLogs { get; set; }
         public DbSet<CashBack> Cashbacks { get; set; }
+        public DbSet<Saving> Savings { get; set; }
+        public DbSet<InterestRates> InterestRates { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
         {

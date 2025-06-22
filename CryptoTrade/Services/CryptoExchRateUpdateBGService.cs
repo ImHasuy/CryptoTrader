@@ -88,6 +88,7 @@ namespace CryptoTrade.Services
                         {
                             await FirstRun(data);
                             await DummyDataInsert();
+                           
                         }
                     }
                 }
@@ -127,6 +128,21 @@ namespace CryptoTrade.Services
                         await _context.ExchangeRateLogs.AddAsync(CryptoLogValue);
                     }
                     await _context.SaveChangesAsync();
+
+                    var cryptoList = await _context.Cryptos.ToListAsync();
+                    int interestrate = 1; // Default interest rate, can be modified later
+                    foreach (var crypto in cryptoList)
+                    {
+                        var temp = new InterestRates
+                        {
+                            CryptoId = crypto.Id,
+                            InterestRate = interestrate
+                        };
+                        interestrate++;
+                        await _context.InterestRates.AddAsync(temp);
+                    }
+                    await _context.SaveChangesAsync();
+
                     return true;
                 }else 
                 {
@@ -193,6 +209,10 @@ namespace CryptoTrade.Services
                 }
                 await _context.SaveChangesAsync();
                 
+
+
+
+
             }
             return true;
         }
